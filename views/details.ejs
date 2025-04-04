@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Entry Details</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="https://t10stcl.com/wp-content/uploads/2020/06/AE312839-79DF-4F5F-8533-4527FD84AAD6.png">
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <a href="https://t10stcl.com/" target="_blank">
+        <img src="https://t10stcl.com/wp-content/uploads/2020/06/AE312839-79DF-4F5F-8533-4527FD84AAD6.png" alt="Logo">
+      </a>
+    </div>
+
+    <h1>Entry Details</h1>
+
+    <ul class="info-list">
+      <li><strong>Name:</strong> <%= entry.Name %></li>
+      <li><strong>Date of Birth:</strong> <%= entry.DOB %></li>
+      <li><strong>Email:</strong> <%= entry.Email %></li>
+      <li><strong>Phone:</strong> <%= entry.Phone %></li>
+      <li><strong>City:</strong> <%= entry.City %></li>
+      <li><strong>Payment Status:</strong> <%= entry.PaymentStatus %></li>
+    </ul>
+
+    <% if (entry.ChangedDates == 1) { %>
+      <div class="locked-info">
+        <p><strong>You have already changed your venue and trial date. Further changes are not allowed.</strong></p>
+        <p><strong>Selected Venue:</strong> <%= entry.VenueSelected %></p>
+        <p><strong>Selected Date:</strong> <%= entry.DatesForTrial %></p>
+      </div>
+    <% } else { %>
+      <form action="/update-entry" method="POST">
+        <input type="hidden" name="entryID" value="<%= entry.EntryID %>">
+
+        <div class="input-wrapper">
+          <div class="input-field">
+            <i class="fas fa-map-marker-alt"></i>
+            <select name="venue" id="venue-select" required>
+              <option value="">-- Select Venue --</option>
+              <% venueOptions.forEach(v => { %>
+                <option value="<%= v.venue %>"><%= v.venue %></option>
+              <% }) %>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-wrapper">
+          <div class="input-field">
+            <i class="fas fa-calendar-day"></i>
+            <select name="dates" id="date-select" required>
+              <option value="">-- Select Date --</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit">Submit</button>
+      </form>
+
+      <script>
+        const venueOptions = JSON.parse('<%- JSON.stringify(venueOptions) %>');
+
+        document.getElementById("venue-select").addEventListener("change", function () {
+          const selectedVenue = this.value;
+          const dateSelect = document.getElementById("date-select");
+          dateSelect.innerHTML = '<option value="">-- Select Date --</option>';
+
+          const matchedVenue = venueOptions.find(v => v.venue === selectedVenue);
+          if (matchedVenue) {
+            matchedVenue.dates.forEach(date => {
+              const option = document.createElement("option");
+              option.value = date;
+              option.textContent = date;
+              dateSelect.appendChild(option);
+            });
+          }
+        });
+      </script>
+    <% } %>
+  </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Check Entry</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="https://t10stcl.com/wp-content/uploads/2020/06/AE312839-79DF-4F5F-8533-4527FD84AAD6.png">
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <a href="https://t10stcl.com/" target="_blank">
+        <img src="https://t10stcl.com/wp-content/uploads/2020/06/AE312839-79DF-4F5F-8533-4527FD84AAD6.png" alt="Logo">
+      </a>
+    </div>    
+
+    <h1>Check Your Entry</h1>
+    <form action="/check-entry" method="POST">
+
+      <div class="input-wrapper">
+        <div class="input-field">
+          <i class="fas fa-id-card"></i>
+          <input type="text" name="entryID" placeholder="Entry ID" required>
+        </div>
+      </div>
+
+      <div class="input-wrapper">
+        <div class="input-field">
+          <i class="fas fa-cake-candles"></i>
+          <input type="date" name="dob" required>
+        </div>
+      </div>
+
+      <button type="submit">Check</button>
+    </form>
+  </div>
+</body>
+</html>

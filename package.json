@@ -1,0 +1,27 @@
+{
+  "name": "t10stcl-registration-check",
+  "version": "1.0.0",
+  "description": "Check Registration Status and select Venue and Date.",
+  "homepage": "https://github.com/Ninja-Yubaraj/Registration-Check#readme",
+  "bugs": {
+    "url": "https://github.com/Ninja-Yubaraj/Registration-Check/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ninja-Yubaraj/Registration-Check.git"
+  },
+  "license": "ISC",
+  "author": "Yubaraj Sarkar",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "lowdb": "^3.0.0"
+  }
+}
