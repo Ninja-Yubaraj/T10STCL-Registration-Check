@@ -1,12 +1,15 @@
+require("dotenv").config(); // Load environment variables
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const { Low, JSONFile } = require("lowdb");
+const nodemailer = require("nodemailer");
 
 const app = express();
 const port = 3000;
 
-// Database setup
+// LowDB setup
 const file = new JSONFile("db.json");
 const db = new Low(file);
 
@@ -16,12 +19,22 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// Home route - Entry ID and DOB input
+// Nodemailer transporter setup
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_SERVER,
+  port: parseInt(process.env.SMTP_PORT),
+  secure: true,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
+  }
+});
+
+// Routes
 app.get("/", (req, res) => {
   res.render("index");
 });
 
-// Check Entry POST - validates entry and payment
 app.post("/check-entry", async (req, res) => {
   const { entryID, dob } = req.body;
   await db.read();
@@ -38,7 +51,6 @@ app.post("/check-entry", async (req, res) => {
   }
 });
 
-// Update Entry POST - saves city, venue, date if not already changed
 app.post("/update-entry", async (req, res) => {
   const { entryID, venueCity, venue, dates } = req.body;
   await db.read();
@@ -52,11 +64,36 @@ app.post("/update-entry", async (req, res) => {
       entry.DatesForTrial = dates;
       entry.ChangedDates = 1;
       await db.write();
+
+      // Send confirmation email
+      const mailOptions = {
+        from: `"T10 STCL Trials" <${process.env.SMTP_USER}>`,
+        to: entry.Email,
+        subject: "Trial Venue & Date Confirmation",
+        html: `
+          <p>Dear ${entry.Name},</p>
+          <p>Thank you for confirming your trial preferences.</p>
+          <p>
+            <strong>City:</strong> ${venueCity}<br>
+            <strong>Venue:</strong> ${venue}<br>
+            <strong>Date:</strong> ${dates}
+          </p>
+          <p>Please arrive 30 minutes early with your ID and gear.</p>
+          <br>
+          <p>Best regards,<br>The T10 STCL Team</p>
+        `
+      };
+
+      try {
+        await transporter.sendMail(mailOptions);
+        console.log("Confirmation email sent to", entry.Email);
+      } catch (err) {
+        console.error("Failed to send confirmation email:", err);
+      }
+
       res.render("success", { name: entry.Name });
     } else {
-      res.send(
-        "You have already changed your details once. Further changes are not allowed."
-      );
+      res.send("You have already changed your details once. Further changes are not allowed.");
     }
   } else {
     res.send("Entry not found.");
