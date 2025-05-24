@@ -9,45 +9,60 @@
       "City": "New York",
       "PaymentStatus": "Paid",
       "TransactionID": "TX001",
-      "VenueSelected": "test2",
-      "DatesForTrial": "2025-04-12",
+      "VenueCitySelected": "",
+      "VenueSelected": "",
+      "DatesForTrial": "",
       "ChangedDates": 0
     },
     {
       "EntryID": "2",
-      "Name": "John Doe",
-      "DOB": "2025-04-02",
-      "Email": "john@example.com",
-      "Phone": "1234567890",
-      "City": "New York",
+      "Name": "Jane Smith",
+      "DOB": "2025-05-15",
+      "Email": "jane@example.com",
+      "Phone": "9876543210",
+      "City": "Los Angeles",
+      "PaymentStatus": "Paid",
+      "TransactionID": "TX002",
+      "VenueCitySelected": "",
+      "VenueSelected": "",
+      "DatesForTrial": "",
+      "ChangedDates": 0
+    },
+    {
+      "EntryID": "3",
+      "Name": "Emily Johnson",
+      "DOB": "2025-03-20",
+      "Email": "emily@example.com",
+      "Phone": "5551234567",
+      "City": "Chicago",
       "PaymentStatus": "",
-      "TransactionID": "TX001",
-      "VenueSelected": "test2",
-      "DatesForTrial": "test3",
+      "TransactionID": "TX003",
+      "VenueCitySelected": "",
+      "VenueSelected": "",
+      "DatesForTrial": "",
       "ChangedDates": 0
     }
   ],
   "venueOptions": [
     {
-      "venue": "test1",
-      "dates": [
-        "2025-04-10",
-        "2025-04-15"
-      ]
+      "city": "New York",
+      "venue": "NY Venue A",
+      "dates": ["2025-04-10", "2025-04-15"]
     },
     {
-      "venue": "test2",
-      "dates": [
-        "2025-04-12",
-        "2025-04-18"
-      ]
+      "city": "New York",
+      "venue": "NY Venue B",
+      "dates": ["2025-04-18", "2025-04-22"]
     },
     {
-      "venue": "test3",
-      "dates": [
-        "2025-04-20",
-        "2025-04-25"
-      ]
+      "city": "Los Angeles",
+      "venue": "LA Sports Complex",
+      "dates": ["2025-04-20", "2025-04-25"]
+    },
+    {
+      "city": "Chicago",
+      "venue": "Chicago Central Field",
+      "dates": ["2025-05-01", "2025-05-05"]
     }
   ]
 }

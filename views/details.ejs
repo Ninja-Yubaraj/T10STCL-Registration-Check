@@ -29,6 +29,7 @@
     <% if (entry.ChangedDates == 1) { %>
       <div class="locked-info">
         <p><strong>You have already changed your venue and trial date. Further changes are not allowed.</strong></p>
+        <p><strong>Selected City:</strong> <%= entry.VenueCitySelected %></p>
         <p><strong>Selected Venue:</strong> <%= entry.VenueSelected %></p>
         <p><strong>Selected Date:</strong> <%= entry.DatesForTrial %></p>
       </div>
@@ -36,18 +37,33 @@
       <form action="/update-entry" method="POST">
         <input type="hidden" name="entryID" value="<%= entry.EntryID %>">
 
+        <!-- Select City -->
         <div class="input-wrapper">
           <div class="input-field">
-            <i class="fas fa-map-marker-alt"></i>
-            <select name="venue" id="venue-select" required>
-              <option value="">-- Select Venue --</option>
-              <% venueOptions.forEach(v => { %>
-                <option value="<%= v.venue %>"><%= v.venue %></option>
+            <i class="fas fa-city"></i>
+            <select name="venueCity" id="city-select" required>
+              <option value="">-- Select City --</option>
+              <% 
+                const uniqueCities = [...new Set(venueOptions.map(v => v.city))];
+                uniqueCities.forEach(city => { 
+              %>
+                <option value="<%= city %>"><%= city %></option>
               <% }) %>
             </select>
           </div>
         </div>
 
+        <!-- Select Venue -->
+        <div class="input-wrapper">
+          <div class="input-field">
+            <i class="fas fa-map-marker-alt"></i>
+            <select name="venue" id="venue-select" required>
+              <option value="">-- Select Venue --</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Select Date -->
         <div class="input-wrapper">
           <div class="input-field">
             <i class="fas fa-calendar-day"></i>
@@ -63,9 +79,26 @@
       <script>
         const venueOptions = JSON.parse('<%- JSON.stringify(venueOptions) %>');
 
-        document.getElementById("venue-select").addEventListener("change", function () {
+        const citySelect = document.getElementById("city-select");
+        const venueSelect = document.getElementById("venue-select");
+        const dateSelect = document.getElementById("date-select");
+
+        citySelect.addEventListener("change", function () {
+          const selectedCity = this.value;
+          venueSelect.innerHTML = '<option value="">-- Select Venue --</option>';
+          dateSelect.innerHTML = '<option value="">-- Select Date --</option>';
+
+          const venuesInCity = venueOptions.filter(v => v.city === selectedCity);
+          venuesInCity.forEach(v => {
+            const option = document.createElement("option");
+            option.value = v.venue;
+            option.textContent = v.venue;
+            venueSelect.appendChild(option);
+          });
+        });
+
+        venueSelect.addEventListener("change", function () {
           const selectedVenue = this.value;
-          const dateSelect = document.getElementById("date-select");
           dateSelect.innerHTML = '<option value="">-- Select Date --</option>';
 
           const matchedVenue = venueOptions.find(v => v.venue === selectedVenue);
